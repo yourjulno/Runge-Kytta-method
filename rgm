@@ -1,0 +1,52 @@
+import matplotlib.pyplot as plt
+import  numpy as np
+# отрезок [a,b]
+print(f"Введите отрезок:")
+a = float(input())
+b = float(input())
+
+# шаг
+print("Введите шаг:")
+h = float(input())
+
+# начальные условия
+y0 = 1
+x0 = 0
+
+# кол-во итераций
+n = (b - a) / h
+
+f = lambda x, y: 3*(x**2)*y
+ylist = []
+xlist = []
+
+for i in range(round(n + 1)):
+    xlist.append(x0 + i * h)
+
+# print('Метод Рунге-Кутта:')
+prev_y = y0
+for i in range(len(xlist)):
+    ylist.append(prev_y)
+    # print(round(prev_y, 3))
+    k1 = f(xlist[i], prev_y)
+    k2 = f(xlist[i] + h / 2, prev_y + (h / 2) * k1)
+    k3 = f(xlist[i] + h / 2, prev_y + (h / 2) * k2)
+    k4 = f(xlist[i] + h, prev_y + h * k3)
+    y = prev_y + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
+    prev_y = y
+
+true_solution = []
+# print('Точное решение: ')
+for x in xlist:
+    func = np.exp(x**3)
+    true_solution.append(func)
+    # print(round(func, 3))
+
+
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.plot(xlist, ylist, "b-o", label="метод Рунге")
+plt.plot(xlist, true_solution, "g--", label="точное решение")
+plt.legend()
+plt.grid()
+plt.show()
